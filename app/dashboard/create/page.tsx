@@ -37,7 +37,6 @@ export default function CreateQuiz() {
     }
 
     try {
-      const newQuiz = { title, description, teacher_id: teacherId }; // Include teacher_id
       router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {

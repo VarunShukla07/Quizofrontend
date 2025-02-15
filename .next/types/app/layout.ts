@@ -1,4 +1,4 @@
-// File: /Users/varunshukla07/Desktop/QuizApp/frontend/app/layout.tsx
+// File: /Users/varunshukla07/Desktop/fron/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

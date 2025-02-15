@@ -35,7 +35,14 @@ export default function Signup() {
         }
       );
 
-      const data = await response.json();
+      interface SignupResponse {
+        user: {
+          id: string;
+          username: string;
+        };
+      }
+      
+      const data = (await response.json()) as { user?: { id: string; username: string }; error?: string };
 
       if (response.ok) {
         toast.success("Signup successful!");
