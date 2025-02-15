@@ -38,11 +38,6 @@ export default function CreateQuiz() {
 
     try {
       const newQuiz = { title, description, teacher_id: teacherId }; // Include teacher_id
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/quizzes`,
-        newQuiz,
-        { withCredentials: true }
-      );
       router.push("/dashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {

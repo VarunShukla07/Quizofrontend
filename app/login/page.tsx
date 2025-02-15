@@ -35,13 +35,14 @@ export default function LoginPage() {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
         { username, password }
       );
+
       if (res.status === 200) {
         const { id, username } = res.data.user;
         localStorage.setItem("user", JSON.stringify({ id, username }));
         toast.success("Login successful!");
         router.push("/dashboard");
       }
-    } catch (err) {
+    } catch {
       toast.error("Invalid credentials! Try again.");
       setError("Invalid credentials! Try again.");
     } finally {
@@ -58,22 +59,25 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
       <div className="absolute top-8 left-8 flex items-center gap-2">
-        
         <Brain className="h-8 w-8 text-primary animate-pulse" />
-        <span className="text-xl font-bold" onClick={() => router.push('/')}>Quizo</span>
+        <span className="text-xl font-bold" onClick={() => router.push("/")}>
+          Quizo
+        </span>
       </div>
-      
+
       <Card className="w-full max-w-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-16 -translate-x-16" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/10 rounded-full translate-y-16 translate-x-16" />
-        
+
         <CardContent className="p-8 relative">
           <div className="flex flex-col items-center mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <LogIn className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold">Welcome Back</h2>
-            <p className="text-muted-foreground mt-2">Sign in to continue your learning journey</p>
+            <p className="text-muted-foreground mt-2">
+              Sign in to continue your learning journey
+            </p>
           </div>
 
           {error && (
