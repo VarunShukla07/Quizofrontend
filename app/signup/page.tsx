@@ -17,7 +17,7 @@ export default function Signup() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!username || !password) {
       toast.error("Please fill in all fields");
       return;
@@ -25,24 +25,16 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: "include",
+      });
 
-      interface SignupResponse {
-        user: {
-          id: string;
-          username: string;
-        };
-      }
-      
-      const data = (await response.json()) as { user?: { id: string; username: string }; error?: string };
+      const data = await response.json();
 
       if (response.ok) {
         toast.success("Signup successful!");
@@ -51,7 +43,8 @@ export default function Signup() {
       } else {
         toast.error(data.error || "Signup failed!");
       }
-    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       toast.error("Server error. Please try again.");
     } finally {
       setIsLoading(false);
@@ -60,6 +53,7 @@ export default function Signup() {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
+       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       handleSignup(e as any);
     }
   };
@@ -68,17 +62,15 @@ export default function Signup() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
       <div className="absolute top-8 left-8 flex items-center gap-2">
         <Brain className="h-8 w-8 text-primary animate-pulse" />
-        <span className="text-xl font-bold" onClick={() => router.push("/")}>
-          Quizo
-        </span>
+        <span className="text-xl font-bold" onClick={() => router.push('/')}>Quizo</span>
       </div>
-
+      
       <Card className="w-full max-w-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -translate-y-16 -translate-x-16" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/10 rounded-full translate-y-16 translate-x-16" />
-
+        
         <CardContent className="p-8 relative">
-          <Link
+          <Link 
             href="/"
             className="absolute top-2 left-2 p-2 hover:bg-muted rounded-full transition-colors"
           >
@@ -90,9 +82,7 @@ export default function Signup() {
               <UserPlus className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-2xl font-bold">Create Account</h2>
-            <p className="text-muted-foreground mt-2">
-              Join our learning community today
-            </p>
+            <p className="text-muted-foreground mt-2">Join our learning community today</p>
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">

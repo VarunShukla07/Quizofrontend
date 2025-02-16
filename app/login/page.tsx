@@ -35,14 +35,14 @@ export default function LoginPage() {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
         { username, password }
       );
-
       if (res.status === 200) {
         const { id, username } = res.data.user;
         localStorage.setItem("user", JSON.stringify({ id, username }));
         toast.success("Login successful!");
         router.push("/dashboard");
       }
-    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
       toast.error("Invalid credentials! Try again.");
       setError("Invalid credentials! Try again.");
     } finally {

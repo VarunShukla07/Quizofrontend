@@ -8,11 +8,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Brain, ArrowLeft, Save } from "lucide-react";
-import { use } from "react";
 
-export default function EditQuiz({ params }: { params: { id: string } }) {
-  const parameters = use(params) as { id: string };
-  const { id } = parameters as { id: string };
+export default function EditQuiz({ params }: { params: Promise<{ id: string }> }) {
+  const [id, setId] = useState<string | null>(null);
   const [quiz, setQuiz] = useState<{ title: string; description: string }>({
     title: "",
     description: "",
@@ -20,14 +18,22 @@ export default function EditQuiz({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Unwrap `params` since it's now a Promise in Next.js
   useEffect(() => {
+    params.then((resolvedParams) => {
+      setId(resolvedParams.id);
+    });
+  }, [params]);
+
+  // Fetch quiz only when `id` is available
+  useEffect(() => {
+    if (!id) return;
+
     const fetchQuiz = async () => {
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/quizzes/${id}`,
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         setQuiz(res.data);
         setLoading(false);
@@ -40,13 +46,13 @@ export default function EditQuiz({ params }: { params: { id: string } }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!id) return;
+
     try {
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/quizzes/${id}`,
         quiz,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       router.push("/dashboard");
     } catch (error) {
@@ -54,7 +60,7 @@ export default function EditQuiz({ params }: { params: { id: string } }) {
     }
   };
 
-  if (loading) {
+  if (loading || !id) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center gap-4">
